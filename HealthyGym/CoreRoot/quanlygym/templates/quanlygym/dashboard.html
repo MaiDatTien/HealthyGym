@@ -1,0 +1,140 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<!-- HERO BANNER SECTION -->
+<div class="position-relative p-5 p-md-5 mb-5 text-center text-white rounded bg-dark shadow-lg overflow-hidden" 
+     style="background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat; margin-top: -1.5rem;">
+    <div class="col-md-9 p-lg-5 mx-auto my-4">
+        <span class="badge bg-warning text-dark px-3 py-2 mb-3 fw-bold text-uppercase fs-6">Hệ Thống Phòng Tập Hiện Đại</span>
+        <h1 class="display-3 fw-bold text-uppercase tracking-wide">Tập Luyện Không Giới Hạn</h1>
+        <p class="lead fw-normal my-4 text-light">
+            Trải nghiệm không gian gym chuẩn 5 sao, máy tập Technogym nhập khẩu 100%, không hợp đồng ràng buộc với mức giá cực hợp lý.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a class="btn btn-warning btn-lg px-4 gap-3 fw-bold text-dark shadow" href="{% url 'register' %}">ĐĂNG KÝ NGAY</a>
+            <a class="btn btn-outline-light btn-lg px-4" href="{% url 'packages' %}">Xem Bảng Giá</a>
+        </div>
+    </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="row text-center mb-5 g-3">
+    <div class="col-md-3 col-6">
+        <div class="p-4 bg-white rounded shadow-sm border-bottom border-warning border-4">
+            <h2 class="fw-bold text-primary mb-0">24/7</h2>
+            <small class="text-muted">Mở cửa liên tục</small>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="p-4 bg-white rounded shadow-sm border-bottom border-warning border-4">
+            <h2 class="fw-bold text-primary mb-0">{{ total_members }}+</h2>
+            <small class="text-muted">Hội viên tin tưởng</small>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="p-4 bg-white rounded shadow-sm border-bottom border-warning border-4">
+            <h2 class="fw-bold text-primary mb-0">100%</h2>
+            <small class="text-muted">Máy nhập khẩu</small>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="p-4 bg-white rounded shadow-sm border-bottom border-warning border-4">
+            <h2 class="fw-bold text-primary mb-0">0đ</h2>
+            <small class="text-muted">Phí cam kết dài hạn</small>
+        </div>
+    </div>
+</div>
+
+<!-- WHY CHOOSE US -->
+<div class="py-4 mb-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-uppercase">Tại Sao Chọn HealthyGym?</h2>
+        <p class="text-muted">Đem lại trải nghiệm tập luyện thoải mái và hiệu quả nhất cho bạn</p>
+    </div>
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="p-4 bg-white rounded shadow-sm h-100">
+                <div class="fs-1 text-warning mb-3">🏋️‍♂️</div>
+                <h4 class="fw-bold mb-3">Thiết Bị Đạt Chuẩn</h4>
+                <p class="text-muted">Trang bị đầy đủ các dòng máy Cardio, Robot và Tạ tự do từ các thương hiệu hàng đầu thế giới.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 bg-white rounded shadow-sm h-100">
+                <div class="fs-1 text-warning mb-3">💳</div>
+                <h4 class="fw-bold mb-3">Gói Tập Linh Hoạt</h4>
+                <p class="text-muted">Thanh toán theo tháng dễ dàng, hủy gói bất kỳ lúc nào mà không gặp thủ tục rườm rà.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 bg-white rounded shadow-sm h-100">
+                <div class="fs-1 text-warning mb-3">🚿</div>
+                <h4 class="fw-bold mb-3">Tiện Ích Miễn Phí</h4>
+                <p class="text-muted">Tủ đồ cá nhân thông minh, phòng tắm nóng lạnh, xông hơi và đo chỉ số cơ thể Inbody hoàn toàn miễn phí.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FEATURED FACILITIES -->
+{% if featured_facilities %}
+<div class="py-4 mb-5 bg-white p-4 rounded shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-0">Không Gian Tập Luyện</h3>
+            <small class="text-muted">Khám phá góc tập hiện đại tại HealthyGym</small>
+        </div>
+        <a href="{% url 'facilities' %}" class="btn btn-outline-primary">Xem tất cả &rarr;</a>
+    </div>
+    <div class="row g-4">
+        {% for item in featured_facilities %}
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{{ item.image_url }}" class="card-img-top rounded-top" style="height: 200px; object-fit: cover;" alt="{{ item.name }}">
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">{{ item.get_category_display }}</span>
+                    <h5 class="fw-bold card-title">{{ item.name }}</h5>
+                    <p class="card-text text-muted small">{{ item.description|truncatewords:15 }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- LATEST NEWS -->
+{% if latest_articles %}
+<div class="py-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-0">Tin Tức & Bí Quyết Tập Luyện</h3>
+            <small class="text-muted">Cập nhật kiến thức thể hình mới nhất từ chuyên gia</small>
+        </div>
+        <a href="{% url 'news_list' %}" class="btn btn-outline-primary">Xem thêm bài viết &rarr;</a>
+    </div>
+    <div class="row g-4">
+        {% for article in latest_articles %}
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <img src="{{ article.image_url }}" class="card-img-top" style="height: 180px; object-fit: cover;" alt="{{ article.title }}">
+                <div class="card-body d-flex flex-column">
+                    <small class="text-muted mb-2">📅 {{ article.created_at|date:"d/m/Y" }}</small>
+                    <h5 class="fw-bold card-title fs-6">{{ article.title }}</h5>
+                    <p class="card-text text-muted small flex-grow-1">{{ article.summary|truncatewords:12 }}</p>
+                    <a href="{% url 'news_detail' article.id %}" class="btn btn-sm btn-link text-decoration-none p-0 fw-bold">Đọc chi tiết &rarr;</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- CALL TO ACTION BANNER -->
+<div class="bg-warning rounded p-5 text-center text-dark shadow-sm mb-4">
+    <h2 class="fw-bold mb-3 text-uppercase">Sẵn Sàng Thay Đổi Vóc Dáng?</h2>
+    <p class="fs-5 mb-4">Đăng ký ngay hôm nay để nhận thêm buổi tư vấn dinh dưỡng và đo Inbody miễn phí!</p>
+    <a href="{% url 'register' %}" class="btn btn-dark btn-lg px-5 fw-bold shadow">THAM GIA NGAY</a>
+</div>
+{% endblock %}

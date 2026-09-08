@@ -1,0 +1,58 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row text-center mb-5">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="display-5 fw-bold mb-3">Về HealthyGym</h1>
+            <p class="lead text-muted">
+                Không gian tập luyện đẳng cấp, trang thiết bị hiện đại cùng đội ngũ PT chuyên nghiệp sẽ đồng hành cùng bạn trên con đường chinh phục vóc dáng mơ ước và nâng cao sức khỏe.
+            </p>
+        </div>
+    </div>
+
+    <h3 class="mb-4 border-bottom pb-2">Không Gian Tập Luyện</h3>
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop" class="card-img-top rounded" alt="Khu vực tạ">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop" class="card-img-top rounded" alt="Khu vực Cardio">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1574680093662-425cb31247dd?q=80&w=600&auto=format&fit=crop" class="card-img-top rounded" alt="Phòng Yoga">
+            </div>
+        </div>
+    </div>
+
+    <div class="row bg-white p-4 p-md-5 rounded shadow-sm mb-4">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <h3 class="mb-4 text-primary">📍 Thông Tin Liên Hệ</h3>
+            <ul class="list-unstyled fs-5">
+                <li class="mb-3"><strong>Địa chỉ:</strong> 123 Đường ABC, Quận 1, TP. HCM</li>
+                <li class="mb-3"><strong>Hotline:</strong> 0909 123 456</li>
+                <li class="mb-3"><strong>Email:</strong> contact@healthygym.vn</li>
+            </ul>
+        </div>
+        <div class="col-md-6 border-md-start ps-md-5">
+            <h3 class="mb-4 text-primary">⏰ Giờ Hoạt Động</h3>
+            <ul class="list-unstyled fs-5">
+                <li class="mb-2 d-flex justify-content-between">
+                    <span>Thứ 2 - Thứ 6:</span> <strong>05:30 - 22:00</strong>
+                </li>
+                <li class="mb-2 d-flex justify-content-between">
+                    <span>Thứ 7 - Chủ Nhật:</span> <strong>06:00 - 20:00</strong>
+                </li>
+                <li class="mb-2 d-flex justify-content-between text-danger mt-3">
+                    <span>Ngày lễ tết:</span> <strong>Nghỉ</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

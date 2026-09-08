@@ -1,0 +1,30 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-md-6">
+        <div class="card shadow border-0">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h4 class="mb-0 fw-bold">Xác Nhận Gia Hạn Gói Tập</h4>
+            </div>
+            <div class="card-body p-4">
+                <h5 class="fw-bold">Gói đã chọn: {{ plan.name }}</h5>
+                <p class="text-muted">Thời hạn: {{ plan.duration_days }} ngày</p>
+                <h3 class="text-danger fw-bold my-3">Tổng tiền: {{ plan.price }} VNĐ</h3>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Phương thức thanh toán</label>
+                        <select name="payment_method" class="form-select">
+                            <option value="TRANSFER">Chuyển khoản QR Chuyển tiền nhanh</option>
+                            <option value="CASH">Thanh toán tiền mặt tại Lễ tân</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg w-100 fw-bold mt-3">XÁC NHẬN TẠO ĐƠN HÀNG</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

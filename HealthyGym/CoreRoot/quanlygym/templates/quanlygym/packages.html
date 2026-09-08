@@ -1,0 +1,30 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-uppercase">Bảng Giá Gói Tập</h1>
+        <p class="text-muted">Chọn gói tập phù hợp để gia hạn thẻ hội viên trực tuyến</p>
+    </div>
+
+    <div class="row justify-content-center g-4">
+        {% for plan in plans %}
+        <div class="col-md-4">
+            <div class="card h-100 shadow border-{% if plan.is_popular %}warning border-3{% else %}0{% endif %}">
+                {% if plan.is_popular %}
+                <div class="bg-warning text-dark text-center py-1 fw-bold text-uppercase">Khuyên Dùng</div>
+                {% endif %}
+                <div class="card-body text-center p-4">
+                    <h3 class="fw-bold">{{ plan.name }}</h3>
+                    <h2 class="text-primary fw-bold my-3">{{ plan.price|filesizeformat }} VNĐ <small class="fs-6 text-muted">/ {{ plan.duration_days }} ngày</small></h2>
+                    <p class="text-secondary mb-4">{{ plan.description|linebreaks }}</p>
+                    <a href="{% url 'checkout' plan.id %}" class="btn btn-{% if plan.is_popular %}warning{% else %}primary{% endif %} btn-lg w-100 fw-bold">CHỌN MUA GÓI NÀY</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5 text-muted">Đang cập nhật bảng giá gói tập.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'news_list' %}">Tin tức</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Bài viết</li>
+                </ol>
+            </nav>
+            
+            <h1 class="fw-bold mb-3">{{ article.title }}</h1>
+            <p class="text-muted mb-4">Đăng ngày {{ article.created_at|date:"d/m/Y H:i" }}</p>
+            
+            <img src="{{ article.image_url }}" class="img-fluid rounded shadow-sm mb-4 w-100" style="max-height: 400px; object-fit: cover;" alt="{{ article.title }}">
+            
+            <div class="fs-5 lh-lg text-secondary">
+                {{ article.content|linebreaks }}
+            </div>
+            
+            <hr class="my-5">
+            <a href="{% url 'news_list' %}" class="btn btn-secondary">&larr; Quay lại danh sách tin tức</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

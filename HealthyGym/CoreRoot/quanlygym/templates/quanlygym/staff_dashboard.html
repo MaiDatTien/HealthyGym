@@ -1,0 +1,238 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Hiển thị thông báo (messages) -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Tiêu đề trang -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h2 class="fw-bold text-danger text-uppercase mb-0">⚙️ Trung Tâm Quản Lý (Custom Admin)</h2>
+            <small class="text-muted">Hệ thống quản trị riêng biệt không phụ thuộc Django Admin</small>
+        </div>
+    </div>
+
+    <!-- THỐNG KÊ NHANH -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white p-3 border-0 shadow-sm text-center">
+                <small class="text-uppercase fw-bold">Tổng Hội Viên</small>
+                <h2 class="mb-0 fw-bold">{{ total_members }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white p-3 border-0 shadow-sm text-center">
+                <small class="text-uppercase fw-bold">Doanh Thu Đã Thu</small>
+                <h2 class="mb-0 fw-bold">{{ total_revenue|filesizeformat }} <small class="fs-6">VNĐ</small></h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark p-3 border-0 shadow-sm text-center">
+                <small class="text-uppercase fw-bold">Đơn Hàng Chờ Duyệt</small>
+                <h2 class="mb-0 fw-bold">{{ pending_orders.count }}</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white p-3 border-0 shadow-sm text-center">
+                <small class="text-uppercase fw-bold">Lịch Hẹn Mới</small>
+                <h2 class="mb-0 fw-bold">{{ pending_bookings.count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- CỘT TRÁI: DANH MỤC KHUNG XỔ XUỐNG -->
+        <div class="col-lg-5">
+            <h5 class="fw-bold mb-3">🛠️ Danh Mục Quản Lý Hệ Thống</h5>
+            
+            <div class="accordion shadow-sm" id="adminAccordion">
+                <!-- Nhóm 1: Người dùng & Nhân sự -->
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button fw-bold text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                            👥 Quản Lý Người Dùng & HLV
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#adminAccordion">
+                        <div class="accordion-body p-0">
+                            <div class="list-group list-group-flush">
+                                <a href="{% url 'admin_member_list' %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Hội viên</h6>
+                                        <small class="text-muted">Xem danh sách, kiểm tra gói tập và xóa hội viên.</small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">&rarr;</span>
+                                </a>
+                                <a href="{% url 'admin_trainer_list' %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Huấn Luyện Viên</h6>
+                                        <small class="text-muted">Cập nhật hồ sơ, chuyên môn, thêm PT mới.</small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">&rarr;</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nhóm 2: Sản phẩm & Cơ sở vật chất -->
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed fw-bold text-danger" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                            💳 Quản Lý Dịch Vụ & Phòng Tập
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#adminAccordion">
+                        <div class="accordion-body p-0">
+                            <div class="list-group list-group-flush">
+                                <a href="{% url 'admin_plan_list' %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Bảng Giá / Gói Tập</h6>
+                                        <small class="text-muted">Điều chỉnh giá gói 1 tháng, 3 tháng, VIP.</small>
+                                    </div>
+                                    <span class="badge bg-danger rounded-pill">&rarr;</span>
+                                </a>
+                                <a href="#" onclick="alert('Đang nâng cấp Custom Admin!');" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 bg-light text-muted">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Chi Nhánh</h6>
+                                        <small>Quản lý địa chỉ, hotline, giờ mở cửa.</small>
+                                    </div>
+                                    <span class="badge bg-secondary">Bảo trì</span>
+                                </a>
+                                <a href="#" onclick="alert('Đang nâng cấp Custom Admin!');" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 bg-light text-muted">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Cơ Sở Vật Chất</h6>
+                                        <small>Quản lý danh mục máy tập, thiết bị.</small>
+                                    </div>
+                                    <span class="badge bg-secondary">Bảo trì</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nhóm 3: Lịch học & Nội dung -->
+                <div class="accordion-item border-0">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                            📰 Quản Lý Nội Dung & Lịch Học
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#adminAccordion">
+                        <div class="accordion-body p-0">
+                            <div class="list-group list-group-flush">
+                                <a href="#" onclick="alert('Đang nâng cấp Custom Admin!');" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 bg-light text-muted">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Lịch Tập GroupX</h6>
+                                        <small>Xếp lịch dạy Yoga, Zumba, Giờ học.</small>
+                                    </div>
+                                    <span class="badge bg-secondary">Bảo trì</span>
+                                </a>
+                                <a href="#" onclick="alert('Đang nâng cấp Custom Admin!');" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 bg-light text-muted">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Tin Tức & Bài Viết</h6>
+                                        <small>Đăng bài khuyến mãi, kiến thức thể thao.</small>
+                                    </div>
+                                    <span class="badge bg-secondary">Bảo trì</span>
+                                </a>
+                                <a href="#" onclick="alert('Đang nâng cấp Custom Admin!');" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 bg-light text-muted">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold">Hỏi Đáp (FAQ)</h6>
+                                        <small>Thêm, sửa, xóa thắc mắc thường gặp.</small>
+                                    </div>
+                                    <span class="badge bg-secondary">Bảo trì</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CỘT PHẢI: DANH SÁCH CẦN DUYỆT GẤP -->
+        <div class="col-lg-7">
+            <h5 class="fw-bold mb-3">🚨 Yêu Cầu Cần Xử Lý</h5>
+            
+            <!-- Lịch Đặt Mới Cần Xử Lý -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-danger text-white fw-bold">
+                    🔥 Lịch Đặt Chờ Xác Nhận
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0 text-center align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Họ tên</th>
+                                <th>SĐT</th>
+                                <th>Dịch vụ</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in pending_bookings %}
+                            <tr>
+                                <td class="fw-bold">{{ b.full_name }}</td>
+                                <td>{{ b.phone }}</td>
+                                <td><span class="badge bg-danger">{{ b.get_service_display }}</span></td>
+                                <td>
+                                    <button onclick="alert('Tính năng duyệt lịch đang được nâng cấp!');" class="btn btn-sm btn-outline-danger">Xử lý</button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="py-4 text-muted">Không có yêu cầu đặt lịch nào mới.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Đơn Hàng Mới -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold">
+                    💳 Đơn Hàng Chờ Thanh Toán
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0 text-center align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Hội viên</th>
+                                <th>Số tiền</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in pending_orders %}
+                            <tr>
+                                <td class="fw-bold">#{{ order.id }}</td>
+                                <td>{{ order.member.user.username }}</td>
+                                <td class="text-danger fw-bold">{{ order.amount }}đ</td>
+                                <td>
+                                    <form method="POST" action="{% url 'admin_approve_order' order.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-success fw-bold" onclick="return confirm('Xác nhận đã nhận tiền và kích hoạt gói tập cho {{ order.member.user.username }}?');">
+                                            ✓ Kích hoạt
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="py-4 text-muted">Không có đơn hàng nào chờ thanh toán.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

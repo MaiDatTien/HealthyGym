@@ -1,0 +1,28 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-uppercase">Hệ Thống Chi Nhánh</h1>
+        <p class="text-muted">Các phòng tập HealthyGym tại những khu vực trung tâm sầm uất</p>
+    </div>
+
+    <div class="row g-4">
+        {% for b in branches %}
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <img src="{{ b.image_url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ b.name }}">
+                <div class="card-body">
+                    <h4 class="fw-bold text-primary">{{ b.name }}</h4>
+                    <p class="mb-2">📍 {{ b.address }}</p>
+                    <p class="mb-2">📞 {{ b.phone }}</p>
+                    <p class="mb-0 text-success fw-bold">⏰ Giờ hoạt động: {{ b.opening_hours }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5 text-muted">Đang cập nhật danh sách chi nhánh.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

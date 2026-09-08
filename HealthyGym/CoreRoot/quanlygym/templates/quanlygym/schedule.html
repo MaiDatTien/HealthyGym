@@ -1,0 +1,43 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-uppercase">Thời Khóa Biểu Lớp Học</h1>
+        <p class="text-muted">Đăng ký tham gia các lớp Yoga, Zumba, Kickboxing hoàn toàn miễn phí cho hội viên</p>
+    </div>
+
+    <div class="row g-4">
+        {% for class in classes %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">{{ class.get_day_of_week_display }}</span>
+                    <span class="badge bg-warning text-dark">{{ class.start_time|time:"H:i" }} - {{ class.end_time|time:"H:i" }}</span>
+                </div>
+                <div class="card-body">
+                    <h4 class="fw-bold text-dark">{{ class.title }}</h4>
+                    <p class="mb-1">📍 <strong>Chi nhánh:</strong> {{ class.branch.name }}</p>
+                    <p class="mb-1">🏋️‍♂️ <strong>HLV:</strong> {{ class.trainer.name|default:"Đang xếp HLV" }}</p>
+                    <p class="mb-3">👥 <strong>Đã đăng ký:</strong> {{ class.enrolled_count }} / {{ class.max_capacity }} chỗ</p>
+                    
+                    {% if user.is_authenticated %}
+                        {% if class.id in user_enrolled_ids %}
+                            <a href="{% url 'cancel_enrollment' class.id %}" class="btn btn-outline-danger w-100">Hủy đăng ký</a>
+                        {% elif class.is_full %}
+                            <button class="btn btn-secondary w-100" disabled>Lớp đã đầy chỗ</button>
+                        {% else %}
+                            <a href="{% url 'enroll_class' class.id %}" class="btn btn-success w-100">Đăng ký giữ chỗ ngay</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary w-100">Đăng nhập để giữ chỗ</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5 text-muted">Chưa có lịch học nào được sắp xếp.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

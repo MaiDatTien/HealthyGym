@@ -1,0 +1,29 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Cơ Sở Vật Chất & Trang Thiết Bị</h1>
+        <p class="text-muted">Hệ thống máy tập nhập khẩu hiện đại 100% đạt tiêu chuẩn quốc tế.</p>
+    </div>
+
+    <div class="row g-4">
+        {% for item in facilities %}
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <img src="{{ item.image_url }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="{{ item.name }}">
+                <div class="card-body">
+                    <span class="badge bg-primary mb-2">{{ item.get_category_display }}</span>
+                    <h5 class="card-title fw-bold">{{ item.name }}</h5>
+                    <p class="card-text text-secondary">{{ item.description }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted fs-5">Chưa có dữ liệu cơ sở vật chất. Hãy thêm mới trong trang Admin!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
