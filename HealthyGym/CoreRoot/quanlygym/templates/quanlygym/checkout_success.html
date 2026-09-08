@@ -1,0 +1,18 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-md-6 text-center">
+        <div class="card shadow border-0 p-4">
+            <h3 class="text-success fw-bold">Tạo Đơn Hàng Thành Công!</h3>
+            <p>Mã đơn hàng: <strong>#{{ order.id }}</strong></p>
+            <p class="fs-4 text-danger fw-bold">Số tiền: {{ order.amount }} VNĐ</p>
+            <hr>
+            <p class="text-muted mb-2">Vui lòng quét mã QR chuyển khoản ngân hàng dưới đây:</p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=HealthyGym_Order_{{ order.id }}" class="img-fluid border p-2 rounded mb-3" alt="QR Code Thanh Toán">
+            <p class="small text-secondary">Cú pháp chuyển khoản: <strong>HG {{ order.id }} {{ member.user.username }}</strong></p>
+            <a href="{% url 'profile' %}" class="btn btn-primary mt-2">Về trang Hồ sơ cá nhân</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

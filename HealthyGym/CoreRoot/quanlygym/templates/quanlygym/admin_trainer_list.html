@@ -1,0 +1,42 @@
+{% extends 'quanlygym/base.html' %}
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-danger text-uppercase mb-0">💪 Quản Lý Huấn Luyện Viên</h2>
+        <div>
+            <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-secondary me-2">&larr; Quay lại</a>
+            <a href="{% url 'admin_trainer_add' %}" class="btn btn-danger fw-bold">+ Thêm PT Mới</a>
+        </div>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <table class="table table-hover table-striped text-center align-middle shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Tên HLV</th>
+                <th>Chuyên môn</th>
+                <th>Kinh nghiệm</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pt in trainers %}
+            <tr>
+                <td class="fw-bold text-primary">{{ pt.name }}</td>
+                <td>{{ pt.specialty }}</td>
+                <td>{{ pt.experience }} Năm</td>
+                <td>
+                    <a href="{% url 'admin_trainer_edit' pt.id %}" class="btn btn-sm btn-warning">✏️ Sửa</a>
+                    <a href="{% url 'admin_trainer_delete' pt.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Xóa PT {{ pt.name }}?');">🗑️ Xóa</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

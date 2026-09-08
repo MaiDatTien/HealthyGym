@@ -1,0 +1,29 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-md-7">
+        <div class="card shadow border-0">
+            <div class="card-header bg-warning text-dark text-center py-3">
+                <h3 class="mb-0 fw-bold">ĐẶT LỊCH TẬP THỬ / TƯ VẤN PT</h3>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted text-center mb-4">Để lại thông tin, đội ngũ HealthyGym sẽ liên hệ xác nhận trong vòng 15 phút!</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold mt-3">GỬI YÊU CẦU ĐẶT LỊCH</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

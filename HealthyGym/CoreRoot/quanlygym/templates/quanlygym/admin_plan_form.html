@@ -1,0 +1,49 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 700px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0 fw-bold">{{ title }}</h4>
+        </div>
+        <div class="card-body p-4">
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Tên Gói Tập / Sản Phẩm</label>
+                    {{ form.name }}
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Giá Bán (VNĐ)</label>
+                        {{ form.price }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Thời Hạn (Số Ngày)</label>
+                        {{ form.duration_days }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Mô Tả Quyền Lợi</label>
+                    {{ form.description }}
+                </div>
+
+                <div class="form-check mb-4">
+                    {{ form.is_popular }}
+                    <label class="form-check-label fw-bold" for="{{ form.is_popular.id_for_label }}">
+                        Hiển thị nhãn Nổi Bật trên trang chủ
+                    </label>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'admin_plan_list' %}" class="btn btn-secondary">&larr; Hủy & Quay lại</a>
+                    <button type="submit" class="btn btn-success fw-bold px-4">💾 Lưu Dữ Liệu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 500px;">
+    <div class="card shadow-sm border-danger border-2 text-center p-4">
+        <h3 class="text-danger fw-bold mb-3">⚠️ Cảnh Báo Xóa</h3>
+        <p>Bạn có chắc chắn muốn xóa sản phẩm / gói tập <strong class="text-dark">'{{ plan.name }}'</strong> (Giá: {{ plan.price }}đ) khỏi hệ thống?</p>
+        <p class="text-muted small">Hành động này không thể hoàn tác.</p>
+        
+        <form method="POST" class="d-flex justify-content-center gap-3 mt-3">
+            {% csrf_token %}
+            <a href="{% url 'admin_plan_list' %}" class="btn btn-secondary px-4">Hủy Bỏ</a>
+            <button type="submit" class="btn btn-danger px-4 fw-bold">Xác Nhận Xóa</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

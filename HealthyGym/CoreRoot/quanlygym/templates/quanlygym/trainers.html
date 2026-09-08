@@ -1,0 +1,31 @@
+{% extends 'quanlygym/base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-uppercase">Đội Ngũ Huấn Luyện Viên</h1>
+        <p class="text-muted">Những chuyên gia đồng hành cùng bạn trên con đường thay đổi vóc dáng</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        {% for trainer in trainers %}
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center">
+                <img src="{{ trainer.image_url }}" class="card-img-top rounded-circle mx-auto mt-4" style="width: 150px; height: 150px; object-fit: cover;" alt="{{ trainer.name }}">
+                <div class="card-body">
+                    <h4 class="fw-bold mb-1">{{ trainer.name }}</h4>
+                    <span class="badge bg-danger mb-3">{{ trainer.specialty }}</span>
+                    <p class="card-text text-secondary mb-2">{{ trainer.bio }}</p>
+                    <p class="fw-bold text-dark">🏅 {{ trainer.experience }} năm kinh nghiệm</p>
+                    <a href="{% url 'booking' %}" class="btn btn-outline-dark btn-sm mt-3">Chọn PT này</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted fs-5">Đang cập nhật danh sách Huấn luyện viên.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
