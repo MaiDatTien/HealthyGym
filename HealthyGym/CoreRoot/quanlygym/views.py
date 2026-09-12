@@ -192,6 +192,9 @@ def feedback_view(request):
     return render(request, 'quanlygym/feedback.html', {'form': form, 'feedbacks': feedbacks})
 
 def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('profile')
+        
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -204,6 +207,9 @@ def register_view(request):
     return render(request, 'quanlygym/register.html', {'form': form})
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('profile')
+        
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -267,6 +273,18 @@ def admin_approve_order(request, order_id):
         else:
             messages.error(request, "⚠️ Đơn hàng này đã được xử lý trước đó.")
             
+    return redirect('staff_dashboard')
+
+@staff_member_required(login_url='/dang-nhap/')
+def admin_approve_booking(request, booking_id):
+    if request.method == 'POST':
+        booking = get_object_or_404(Booking, id=booking_id)
+        if booking.status == 'PENDING':
+            booking.status = 'CONFIRMED'
+            booking.save()
+            messages.success(request, f"✅ Đã duyệt và xác nhận lịch hẹn thành công cho khách hàng: {booking.full_name}!")
+        else:
+            messages.error(request, "⚠️ Lịch hẹn này đã được xử lý trước đó.")
     return redirect('staff_dashboard')
 
 @staff_member_required(login_url='/dang-nhap/')
@@ -358,4 +376,16 @@ def admin_member_delete(request, member_id):
     member = get_object_or_404(Member, id=member_id)
     member.user.delete() 
     messages.warning(request, "Đã xóa Hội viên và Tài khoản đăng nhập.")
+    return redirect('admin_member_list')
+
+@staff_member_required(login_url='/dang-nhap/')
+def admin_approve_member_quick(request, member_id):
+    if request.method == 'POST':
+        member = get_object_or_404(Member, id=member_id)
+        if not member.expire_date or member.expire_date < date.today():
+            member.expire_date = date.today() + timedelta(days=30)
+        else:
+            member.expire_date = member.expire_date + timedelta(days=30)
+        member.save()
+        messages.success(request, f"✅ Đã duyệt và kích hoạt gói 30 ngày cho hội viên {member.user.username}!")
     return redirect('admin_member_list')

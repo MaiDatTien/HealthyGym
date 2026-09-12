@@ -42,7 +42,9 @@ urlpatterns = [
     # ===== QUẢN LÝ NGƯỜI DÙNG =====
     path('quan-tri/hoi-vien/', views.admin_member_list, name='admin_member_list'),
     path('quan-tri/hoi-vien/xoa/<int:member_id>/', views.admin_member_delete, name='admin_member_delete'),
+    path('quan-tri/hoi-vien/duyet/<int:member_id>/', views.admin_approve_member_quick, name='admin_approve_member_quick'),
     
-    # ===== DUYỆT ĐƠN HÀNG =====
+    # ===== DUYỆT ĐƠN HÀNG VÀ LỊCH HẸN =====
     path('quan-tri/duyet-don/<int:order_id>/', views.admin_approve_order, name='admin_approve_order'),
+    path('quan-tri/duyet-lich/<int:booking_id>/', views.admin_approve_booking, name='admin_approve_booking'),
 ]
