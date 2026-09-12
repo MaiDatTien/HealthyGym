@@ -2,39 +2,73 @@
 {% block content %}
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-danger text-uppercase mb-0">👥 Quản Lý Hội Viên</h2>
-        <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-secondary">&larr; Quay lại</a>
+        <h2 class="fw-bold text-primary text-uppercase mb-0">👥 Quản Lý Hội Viên</h2>
+        <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-secondary">&larr; Quay lại Admin</a>
     </div>
 
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
         {% endfor %}
     {% endif %}
 
-    <table class="table table-hover table-striped text-center align-middle shadow-sm">
-        <thead class="table-dark">
-            <tr>
-                <th>Tài khoản</th>
-                <th>SĐT</th>
-                <th>Gói Tập</th>
-                <th>Ngày Hết Hạn</th>
-                <th>Thao tác</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for m in members %}
-            <tr>
-                <td class="fw-bold">{{ m.user.username }}</td>
-                <td>{{ m.phone }}</td>
-                <td><span class="badge bg-success">{{ m.get_membership_type_display }}</span></td>
-                <td>{{ m.expire_date|default:"Chưa kích hoạt" }}</td>
-                <td>
-                    <a href="{% url 'admin_member_delete' m.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Xóa tài khoản này?');">🗑️ Xóa</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped text-center align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Tài khoản</th>
+                            <th>Họ & Tên</th>
+                            <th>SĐT</th>
+                            <th>Ngày Đăng Ký</th>
+                            <th>Gói Tập</th>
+                            <th>Ngày Hết Hạn</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in members %}
+                        <tr>
+                            <td class="fw-bold text-primary">{{ m.user.username }}</td>
+                            <td>{{ m.user.get_full_name|default:"-" }}</td>
+                            <td>{{ m.phone }}</td>
+                            
+                            <!-- CỘT NGÀY ĐĂNG KÝ -->
+                            <td class="fw-bold text-secondary">{{ m.join_date|date:"d/m/Y" }}</td>
+                            
+                            <td><span class="badge bg-success">{{ m.get_membership_type_display }}</span></td>
+                            
+                            {% if m.is_active %}
+                                <td class="text-success fw-bold">{{ m.expire_date|date:"d/m/Y" }}</td>
+                            {% else %}
+                                <td class="text-danger small">{{ m.expire_date|date:"d/m/Y"|default:"Chưa kích hoạt" }} (Hết hạn)</td>
+                            {% endif %}
+                            
+                            <td>
+                                <!-- NÚT DUYỆT ĐĂNG KÝ NẾU TÀI KHOẢN CHƯA KÍCH HOẠT HOẶC HẾT HẠN -->
+                                {% if not m.is_active %}
+                                <form method="POST" action="{% url 'admin_approve_member_quick' m.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-success mb-1" onclick="return confirm('Duyệt và kích hoạt 30 ngày tập cho hội viên {{ m.user.username }}?');">
+                                        ✓ Duyệt Đăng Ký
+                                    </button>
+                                </form>
+                                {% endif %}
+                                
+                                <a href="{% url 'admin_member_delete' m.id %}" class="btn btn-sm btn-danger mb-1" onclick="return confirm('Xóa toàn bộ dữ liệu của hội viên này?');">🗑️ Xóa</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="7" class="py-4 text-muted">Chưa có hội viên nào đăng ký.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

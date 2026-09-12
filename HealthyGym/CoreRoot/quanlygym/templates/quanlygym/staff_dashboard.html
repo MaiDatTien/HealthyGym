@@ -183,7 +183,12 @@
                                 <td>{{ b.phone }}</td>
                                 <td><span class="badge bg-danger">{{ b.get_service_display }}</span></td>
                                 <td>
-                                    <button onclick="alert('Tính năng duyệt lịch đang được nâng cấp!');" class="btn btn-sm btn-outline-danger">Xử lý</button>
+                                    <form method="POST" action="{% url 'admin_approve_booking' b.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger fw-bold" onclick="return confirm('Xác nhận lịch hẹn cho {{ b.full_name }}?');">
+                                            ✓ Xác nhận
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             {% empty %}
