@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import MembershipPlan, Member, HealthRecord, Booking, Feedback, Trainer
+from .models import MembershipPlan, Member, HealthRecord, Booking, Feedback, Trainer, Branch, GymClass
 
-# 1. Form Quản lý Huấn Luyện Viên (PT)
 class TrainerForm(forms.ModelForm):
     class Meta:
         model = Trainer
@@ -22,7 +21,6 @@ class TrainerForm(forms.ModelForm):
             'image_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://...'}),
         }
 
-# 2. Form Quản lý Sản phẩm / Gói tập
 class MembershipPlanForm(forms.ModelForm):
     class Meta:
         model = MembershipPlan
@@ -42,15 +40,9 @@ class MembershipPlanForm(forms.ModelForm):
             'is_popular': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
-# 3. Form Đăng ký tài khoản
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), label="Mật khẩu")
     phone = forms.CharField(max_length=15, widget=forms.TextInput(attrs={'class': 'form-control'}), label="Số điện thoại")
-    membership_type = forms.ChoiceField(
-        choices=[('STD', 'Gói Tiêu Chuẩn'), ('VIP', 'Gói VIP')],
-        widget=forms.Select(attrs={'class': 'form-select'}),
-        label="Chọn gói tập"
-    )
 
     class Meta:
         model = User
@@ -70,22 +62,20 @@ class RegisterForm(forms.ModelForm):
             Member.objects.create(
                 user=user,
                 phone=self.cleaned_data["phone"],
-                membership_type=self.cleaned_data["membership_type"]
+                membership_type='STD' 
             )
         return user
 
-# 4. Form Sức khỏe
 class HealthRecordForm(forms.ModelForm):
     class Meta:
         model = HealthRecord
         fields = ['weight', 'height', 'body_fat']
         widgets = {
-            'weight': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
-            'height': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
+            'weight': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'min': '20'}),
+            'height': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'min': '100'}),
             'body_fat': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1'}),
         }
 
-# 5. Form Đặt lịch
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
@@ -99,7 +89,6 @@ class BookingForm(forms.ModelForm):
             'note': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
 
-# 6. Form Đánh giá
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
@@ -108,4 +97,39 @@ class FeedbackForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'rating': forms.Select(attrs={'class': 'form-select'}),
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+
+# --- FORM MỚI BỔ SUNG ---
+class BranchForm(forms.ModelForm):
+    class Meta:
+        model = Branch
+        fields = ['name', 'address', 'phone', 'opening_hours', 'image_url']
+        labels = {
+            'name': 'Tên chi nhánh', 'address': 'Địa chỉ', 'phone': 'Hotline', 
+            'opening_hours': 'Giờ mở cửa', 'image_url': 'Link ảnh'
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'opening_hours': forms.TextInput(attrs={'class': 'form-control'}),
+            'image_url': forms.URLInput(attrs={'class': 'form-control'}),
+        }
+
+class GymClassForm(forms.ModelForm):
+    class Meta:
+        model = GymClass
+        fields = ['title', 'trainer', 'branch', 'day_of_week', 'start_time', 'end_time', 'max_capacity']
+        labels = {
+            'title': 'Tên lớp', 'trainer': 'Huấn luyện viên', 'branch': 'Chi nhánh', 
+            'day_of_week': 'Thứ', 'start_time': 'Giờ bắt đầu', 'end_time': 'Giờ kết thúc', 'max_capacity': 'Số lượng tối đa'
+        }
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'trainer': forms.Select(attrs={'class': 'form-select'}),
+            'branch': forms.Select(attrs={'class': 'form-select'}),
+            'day_of_week': forms.Select(attrs={'class': 'form-select'}),
+            'start_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+            'end_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+            'max_capacity': forms.NumberInput(attrs={'class': 'form-control'}),
         }
