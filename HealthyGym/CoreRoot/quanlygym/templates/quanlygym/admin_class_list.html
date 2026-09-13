@@ -1,0 +1,44 @@
+{% extends 'quanlygym/base.html' %}
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-success text-uppercase mb-0">🧘‍♀️ Quản Lý Lịch Tập GroupX</h2>
+        <div>
+            <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-secondary me-2">&larr; Quay lại</a>
+            <a href="{% url 'admin_class_add' %}" class="btn btn-success fw-bold">+ Thêm Lịch Học</a>
+        </div>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped text-center align-middle mb-0">
+                <thead class="table-dark">
+                    <tr><th>Thứ</th><th>Giờ học</th><th>Lớp</th><th>Huấn luyện viên</th><th>Chi nhánh</th><th>Đã ĐK/Tối đa</th><th>Thao tác</th></tr>
+                </thead>
+                <tbody>
+                    {% for c in classes %}
+                    <tr>
+                        <td class="fw-bold">{{ c.get_day_of_week_display }}</td>
+                        <td class="text-danger fw-bold">{{ c.start_time|time:"H:i" }} - {{ c.end_time|time:"H:i" }}</td>
+                        <td class="text-primary fw-bold">{{ c.title }}</td>
+                        <td>{{ c.trainer.name|default:"-" }}</td>
+                        <td>{{ c.branch.name }}</td>
+                        <td>{{ c.enrolled_count }} / {{ c.max_capacity }}</td>
+                        <td>
+                            <a href="{% url 'admin_class_edit' c.id %}" class="btn btn-sm btn-warning">✏️ Sửa</a>
+                            <a href="{% url 'admin_class_delete' c.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Xóa lịch {{ c.title }}?');">🗑️ Xóa</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7" class="py-4 text-muted">Chưa có lịch học nào.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

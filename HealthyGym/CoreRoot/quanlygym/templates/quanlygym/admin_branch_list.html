@@ -1,0 +1,42 @@
+{% extends 'quanlygym/base.html' %}
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-danger text-uppercase mb-0">🏢 Quản Lý Chi Nhánh</h2>
+        <div>
+            <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-secondary me-2">&larr; Quay lại</a>
+            <a href="{% url 'admin_branch_add' %}" class="btn btn-danger fw-bold">+ Thêm Chi Nhánh</a>
+        </div>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped text-center align-middle mb-0">
+                <thead class="table-dark">
+                    <tr><th>Tên Chi Nhánh</th><th>Địa chỉ</th><th>Hotline</th><th>Giờ mở cửa</th><th>Thao tác</th></tr>
+                </thead>
+                <tbody>
+                    {% for b in branches %}
+                    <tr>
+                        <td class="fw-bold text-primary">{{ b.name }}</td>
+                        <td>{{ b.address }}</td>
+                        <td>{{ b.phone }}</td>
+                        <td><span class="badge bg-secondary">{{ b.opening_hours }}</span></td>
+                        <td>
+                            <a href="{% url 'admin_branch_edit' b.id %}" class="btn btn-sm btn-warning">✏️ Sửa</a>
+                            <a href="{% url 'admin_branch_delete' b.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Xóa chi nhánh {{ b.name }}?');">🗑️ Xóa</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="py-4 text-muted">Chưa có chi nhánh nào.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

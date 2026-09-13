@@ -2,39 +2,87 @@
 {% block content %}
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-danger text-uppercase mb-0">👥 Quản Lý Hội Viên</h2>
-        <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-secondary">&larr; Quay lại</a>
+        <h2 class="fw-bold text-primary text-uppercase mb-0">👥 Quản Lý Phân Quyền Hội Viên</h2>
+        <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-secondary">&larr; Quay lại Admin</a>
     </div>
 
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
         {% endfor %}
     {% endif %}
 
-    <table class="table table-hover table-striped text-center align-middle shadow-sm">
-        <thead class="table-dark">
-            <tr>
-                <th>Tài khoản</th>
-                <th>SĐT</th>
-                <th>Gói Tập</th>
-                <th>Ngày Hết Hạn</th>
-                <th>Thao tác</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for m in members %}
-            <tr>
-                <td class="fw-bold">{{ m.user.username }}</td>
-                <td>{{ m.phone }}</td>
-                <td><span class="badge bg-success">{{ m.get_membership_type_display }}</span></td>
-                <td>{{ m.expire_date|default:"Chưa kích hoạt" }}</td>
-                <td>
-                    <a href="{% url 'admin_member_delete' m.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Xóa tài khoản này?');">🗑️ Xóa</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped text-center align-middle mb-0">
+                    <!-- TÁCH BIỆT KHU VỰC TÀI KHOẢN VÀ GÓI TẬP -->
+                    <thead class="table-dark">
+                        <tr>
+                            <th colspan="4" class="border-end bg-dark">THÔNG TIN TÀI KHOẢN</th>
+                            <th colspan="3" class="bg-secondary">THÔNG TIN GÓI TẬP & THAO TÁC</th>
+                        </tr>
+                        <tr class="bg-light text-dark">
+                            <th>Tài khoản</th>
+                            <th>Họ & Tên</th>
+                            <th>SĐT</th>
+                            <th class="border-end">Ngày Đăng Ký TK</th>
+                            <th>Loại Gói</th>
+                            <th>Tình Trạng Hạn Thẻ</th>
+                            <th>Thao Tác Quản Lý</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in members %}
+                        <tr>
+                            <!-- 1. QUẢN LÝ THÔNG TIN TÀI KHOẢN -->
+                            <td class="fw-bold text-primary">{{ m.user.username }}</td>
+                            <td>{{ m.user.get_full_name|default:"-" }}</td>
+                            <td>{{ m.phone }}</td>
+                            <td class="fw-bold text-secondary border-end">{{ m.join_date|date:"d/m/Y" }}</td>
+                            
+                            <!-- 2. QUẢN LÝ GÓI TẬP -->
+                            <td><span class="badge bg-success">{{ m.get_membership_type_display }}</span></td>
+                            
+                            {% if m.is_active %}
+                                <td class="text-success fw-bold">{{ m.expire_date|date:"d/m/Y" }} <br><small class="text-muted">(Đang hoạt động)</small></td>
+                            {% else %}
+                                <td class="text-danger small">{{ m.expire_date|date:"d/m/Y"|default:"Chưa kích hoạt" }} <br> (Đã hết hạn/Chưa có)</td>
+                            {% endif %}
+                            
+                            <!-- 3. CHỨC NĂNG NGHIỆP VỤ -->
+                            <td>
+                                <!-- Nhóm thao tác gói tập -->
+                                {% if not m.is_active %}
+                                    <form method="POST" action="{% url 'admin_approve_member_quick' m.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-success mb-1" onclick="return confirm('Kích hoạt 30 ngày tập cho hội viên {{ m.user.username }}?');">
+                                            ✓ Kích Hoạt Gói
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form method="POST" action="{% url 'admin_cancel_member_plan' m.id %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-warning mb-1" onclick="return confirm('HỦY GÓI TẬP: Hành động này sẽ cắt ngày tập của {{ m.user.username }} nhưng VẪN GIỮ LẠI tài khoản đăng nhập. Xác nhận hủy?');">
+                                            🚫 Hủy Gói
+                                        </button>
+                                    </form>
+                                {% endif %}
+                                
+                                <!-- Nhóm thao tác tài khoản -->
+                                <a href="{% url 'admin_member_delete' m.id %}" class="btn btn-sm btn-danger mb-1" onclick="return confirm('XÓA TÀI KHOẢN: Cảnh báo, hành động này sẽ xóa vĩnh viễn tài khoản và toàn bộ lịch sử của người này. Bạn có chắc không?');">🗑️ Xóa TK</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="7" class="py-4 text-muted">Chưa có hội viên nào đăng ký.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

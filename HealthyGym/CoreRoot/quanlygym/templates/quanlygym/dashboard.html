@@ -11,7 +11,13 @@
             Trải nghiệm không gian gym chuẩn 5 sao, máy tập Technogym nhập khẩu 100%, không hợp đồng ràng buộc với mức giá cực hợp lý.
         </p>
         <div class="d-flex justify-content-center gap-3">
-            <a class="btn btn-warning btn-lg px-4 gap-3 fw-bold text-dark shadow" href="{% url 'register' %}">ĐĂNG KÝ NGAY</a>
+            <!-- NẾU CHƯA ĐĂNG NHẬP THÌ HIỆN NÚT ĐĂNG KÝ -->
+            {% if not user.is_authenticated %}
+                <a class="btn btn-warning btn-lg px-4 gap-3 fw-bold text-dark shadow" href="{% url 'register' %}">ĐĂNG KÝ NGAY</a>
+            <!-- NẾU ĐÃ LÀ HỘI VIÊN THÌ ĐỔI THÀNH NÚT HỒ SƠ -->
+            {% else %}
+                <a class="btn btn-warning btn-lg px-4 gap-3 fw-bold text-dark shadow" href="{% url 'profile' %}">HỒ SƠ CỦA TÔI</a>
+            {% endif %}
             <a class="btn btn-outline-light btn-lg px-4" href="{% url 'packages' %}">Xem Bảng Giá</a>
         </div>
     </div>
@@ -131,10 +137,12 @@
 </div>
 {% endif %}
 
-<!-- CALL TO ACTION BANNER -->
+<!-- CALL TO ACTION BANNER (CHỈ HIỆN KHI CHƯA ĐĂNG NHẬP) -->
+{% if not user.is_authenticated %}
 <div class="bg-warning rounded p-5 text-center text-dark shadow-sm mb-4">
     <h2 class="fw-bold mb-3 text-uppercase">Sẵn Sàng Thay Đổi Vóc Dáng?</h2>
     <p class="fs-5 mb-4">Đăng ký ngay hôm nay để nhận thêm buổi tư vấn dinh dưỡng và đo Inbody miễn phí!</p>
     <a href="{% url 'register' %}" class="btn btn-dark btn-lg px-5 fw-bold shadow">THAM GIA NGAY</a>
 </div>
+{% endif %}
 {% endblock %}
