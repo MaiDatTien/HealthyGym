@@ -1,0 +1,10 @@
+{
+  "/page": "app/page.js",
+  "/ai-coach/page": "app/ai-coach/page.js",
+  "/plans/page": "app/plans/page.js",
+  "/login/page": "app/login/page.js",
+  "/ai-plus/page": "app/ai-plus/page.js",
+  "/groupx/page": "app/groupx/page.js",
+  "/pt-booking/page": "app/pt-booking/page.js",
+  "/equipment/page": "app/equipment/page.js"
+}

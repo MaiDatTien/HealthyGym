@@ -1,0 +1,963 @@
+/* ==========================================================================
+   HealthyGym — SNEAT DESIGN SYSTEM
+   Phong cách Dashboard hiện đại, tinh tế lấy cảm hứng từ Sneat Admin:
+   - Màu chủ đạo: Tím Sneat (#696cff), Xanh ngọc (#03c3ec), Xanh lá (#71dd37),
+     Cam cảnh báo (#ffab00), Đỏ lỗi (#ff3e1d), Xám xịt phụ (#8592a3)
+   - Nền trang: #f5f5f9 (Light slate-gray)
+   - Thẻ trắng phẳng với bóng đổ nhẹ 0 2px 6px 0 rgba(67, 89, 113, 0.12)
+   - Bo góc 8px (0.5rem)
+   ========================================================================== */
+
+:root {
+  /* --- Màu chủ đạo Sneat --- */
+  --primary:         #696cff;
+  --primary-hover:   #5f61e6;
+  --primary-light:   #e7e7ff;
+  --primary-dark:    #435971;
+
+  --secondary:       #8592a3;
+  --secondary-light: #ebeef0;
+
+  --success:         #71dd37;
+  --success-light:   #e8fadf;
+  --success-dark:    #5eb82e;
+
+  --danger:          #ff3e1d;
+  --danger-light:    #ffe0db;
+  --danger-dark:     #d43317;
+
+  --warning:         #ffab00;
+  --warning-light:   #fff2d6;
+  --warning-dark:    #d99100;
+
+  --info:            #03c3ec;
+  --info-light:      #d7f5fc;
+  --info-dark:       #02a1c4;
+
+  /* --- Nền & Card --- */
+  --body-bg:         #f5f5f9;
+  --card-bg:         #ffffff;
+  --sidebar-bg:      #ffffff;
+  --topbar-bg:       #ffffff;
+
+  /* --- Màu chữ --- */
+  --heading-color:   #566a7f;
+  --body-color:      #697a8d;
+  --muted-color:     #a1acb8;
+  --light-color:     #cbd4db;
+
+  /* --- Đường viền & Bóng --- */
+  --border-color:    #d9dee3;
+  --border-light:    #eceef1;
+  --card-shadow:     0 2px 6px 0 rgba(67, 89, 113, 0.12);
+  --card-shadow-hover: 0 4px 16px 0 rgba(67, 89, 113, 0.18);
+  --btn-shadow:      0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+
+  /* --- Typography --- */
+  --font-sans:       "Public Sans", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono:       "IBM Plex Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --radius:          8px;
+  --radius-sm:       6px;
+  --radius-lg:       12px;
+  --radius-pill:     50rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--body-color);
+  background: var(--body-bg);
+  min-height: 100vh;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out;
+}
+a:hover {
+  color: var(--primary-hover);
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--heading-color);
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.25rem; }
+h3 { font-size: 1.1rem; }
+h4 { font-size: 0.95rem; }
+
+/* ==========================================================================
+   BỐ CỤC CHÍNH (SNEAT APP LAYOUT)
+   Sidebar trái (fixed / sticky) + Vùng nội dung bên phải (Top Navbar + Content)
+   ========================================================================== */
+
+.sneat-app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--body-bg);
+}
+
+/* Sidebar trái */
+.sneat-sidebar {
+  width: 260px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border-light);
+  box-shadow: 0 0.125rem 0.375rem 0 rgba(161, 172, 184, 0.12);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  overflow-y: auto;
+  transition: transform 0.25s ease-in-out;
+}
+
+.sneat-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border-light);
+  text-decoration: none;
+}
+.sneat-brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #696cff 0%, #3f42e4 100%);
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  box-shadow: 0 2px 6px rgba(105, 108, 255, 0.4);
+}
+.sneat-brand-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  letter-spacing: -0.02em;
+}
+.sneat-brand-name strong {
+  color: var(--primary);
+}
+
+.sneat-menu {
+  padding: 12px 0 24px;
+  flex: 1;
+}
+
+.sneat-menu-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted-color);
+  padding: 18px 24px 6px;
+}
+
+.sneat-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 18px;
+  margin: 2px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--body-color);
+  text-decoration: none;
+  transition: all 0.15s ease-in-out;
+}
+.sneat-menu-item:hover {
+  background: #f5f5f9;
+  color: var(--heading-color);
+}
+.sneat-menu-item.active {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+}
+.sneat-menu-icon {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Vùng nội dung chính */
+.sneat-main-content {
+  flex: 1;
+  margin-left: 260px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--body-bg);
+}
+
+.sneat-topbar-wrapper {
+  padding: 16px 24px 0;
+}
+
+.sneat-topbar {
+  background: var(--topbar-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sneat-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  max-width: 380px;
+  background: #f5f5f9;
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.sneat-search:focus-within {
+  background: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.15);
+}
+.sneat-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 13.5px;
+  color: var(--heading-color);
+}
+.sneat-search-shortcut {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted-color);
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.sneat-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sneat-user-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: #fbfbfc;
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+}
+.sneat-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.sneat-page-body {
+  padding: 0 24px 32px;
+  flex: 1;
+}
+
+/* ==========================================================================
+   CARDS & SNEAT DASHBOARD GRID
+   ========================================================================== */
+
+.card, .hg-chart-card, .sneat-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  border: 1px solid transparent;
+  padding: 24px;
+  margin-bottom: 24px;
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+  position: relative;
+}
+
+.card:hover, .hg-chart-card:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+.hg-chart-title, .sneat-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hg-chart-sub, .sneat-card-sub {
+  font-size: 13px;
+  color: var(--muted-color);
+  margin-bottom: 18px;
+}
+
+/* Grid layout */
+.sneat-grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.col-8 { grid-column: span 8; }
+.col-4 { grid-column: span 4; }
+.col-6 { grid-column: span 6; }
+.col-3 { grid-column: span 3; }
+.col-12 { grid-column: span 12; }
+
+@media (max-width: 1200px) {
+  .col-8 { grid-column: span 12; }
+  .col-4 { grid-column: span 12; }
+  .col-6 { grid-column: span 12; }
+  .col-3 { grid-column: span 6; }
+}
+
+@media (max-width: 768px) {
+  .col-3 { grid-column: span 12; }
+}
+
+.hg-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 900px) {
+  .hg-grid-2 { grid-template-columns: 1fr; }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* Welcome banner card (Sneat style: Congratulations John!) */
+.sneat-welcome-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+}
+.sneat-welcome-content {
+  flex: 1;
+  max-width: 65%;
+  z-index: 1;
+}
+.sneat-welcome-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+.sneat-welcome-desc {
+  font-size: 14px;
+  color: var(--body-color);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+.sneat-welcome-art {
+  width: 170px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Stat card nhỏ với icon hình vuông bo tròn Sneat */
+.sneat-mini-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sneat-stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sneat-icon-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+.sneat-icon-badge.primary { background: var(--primary-light); color: var(--primary); }
+.sneat-icon-badge.success { background: var(--success-light); color: var(--success); }
+.sneat-icon-badge.warning { background: var(--warning-light); color: var(--warning); }
+.sneat-icon-badge.danger  { background: var(--danger-light);  color: var(--danger);  }
+.sneat-icon-badge.info    { background: var(--info-light);    color: var(--info);    }
+
+.sneat-mini-stat-label {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--body-color);
+}
+.sneat-mini-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  line-height: 1.2;
+}
+
+/* ==========================================================================
+   BUTTONS (SNEAT ROUNDED STYLES)
+   ========================================================================== */
+
+.btn, .hg-btn-primary, .hg-btn-gold, .hg-btn-emerald, .hg-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:disabled, .hg-btn-primary:disabled, .hg-btn-gold:disabled, .hg-btn-emerald:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.hg-btn-primary, .btn-primary {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--btn-shadow);
+}
+.hg-btn-primary:hover:not(:disabled), .btn-primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.hg-btn-gold {
+  background: linear-gradient(135deg, #ffab00 0%, #e09600 100%);
+  color: #fff;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(255, 171, 0, 0.4);
+}
+.hg-btn-gold:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.hg-btn-emerald, .btn-success {
+  background: var(--success);
+  color: #fff;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(113, 221, 55, 0.4);
+}
+.hg-btn-emerald:hover:not(:disabled), .btn-success:hover:not(:disabled) {
+  background: var(--success-dark);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.hg-btn-ghost, .btn-secondary {
+  background: #f5f5f9;
+  color: var(--heading-color);
+  border-color: var(--border-color);
+}
+.hg-btn-ghost:hover:not(:disabled) {
+  background: #e8e8ed;
+}
+
+.hg-btn-sm {
+  padding: 5px 12px;
+  font-size: 12.5px;
+}
+
+/* ==========================================================================
+   BADGES & CHIPS
+   ========================================================================== */
+
+.badge, .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  line-height: 1;
+}
+
+.badge-primary, .chip-gold {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.badge-success, .chip-ok {
+  background: var(--success-light);
+  color: var(--success-dark);
+}
+
+.badge-warning, .chip-warn {
+  background: var(--warning-light);
+  color: var(--warning-dark);
+}
+
+.badge-danger, .chip-danger {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+.badge-info {
+  background: var(--info-light);
+  color: var(--info-dark);
+}
+
+.badge-secondary, .chip {
+  background: var(--secondary-light);
+  color: var(--secondary);
+}
+
+/* ==========================================================================
+   STATS BAR & METRICS
+   ========================================================================== */
+
+.stats-bar, .hg-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-item, .sneat-stat-item, .hg-metric, .sneat-metric {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  padding: 18px 20px;
+  border-left: 4px solid var(--border-color);
+}
+
+.stat-item.gold, .stat-item.primary, .hg-metric.gold, .sneat-metric.primary {
+  border-left-color: var(--primary);
+}
+
+.sneat-metric-label, .hg-metric-label, .sneat-stat-label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.sneat-metric-value, .hg-metric-value, .sneat-stat-val, .stat-item strong {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  line-height: 1.2;
+}
+
+.sneat-metric-note, .hg-metric-note {
+  font-size: 12px;
+  color: var(--muted-color);
+  margin-top: 4px;
+}
+
+.sneat-delta {
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.sneat-delta.positive { color: var(--success); }
+.sneat-delta.negative { color: var(--danger); }
+.sneat-delta.flat { color: var(--muted-color); }
+
+/* ==========================================================================
+   ALERTS / NOTES
+   ========================================================================== */
+
+.sneat-alert, .hg-note {
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  line-height: 1.55;
+  margin-bottom: 18px;
+  border-left: 4px solid var(--border-color);
+  background: #fbfbfc;
+  color: var(--body-color);
+}
+
+.alert-primary, .hg-note.gold {
+  background: var(--primary-light);
+  border-left-color: var(--primary);
+  color: #484bbf;
+}
+
+.alert-success, .hg-note.ok {
+  background: var(--success-light);
+  border-left-color: var(--success);
+  color: #3f7b24;
+}
+
+.alert-warning, .hg-note.warn {
+  background: var(--warning-light);
+  border-left-color: var(--warning);
+  color: #8c5d00;
+}
+
+.alert-danger, .hg-note.danger, .hg-warning-box {
+  background: var(--danger-light);
+  border-left-color: var(--danger);
+  color: #a82812;
+}
+
+.hg-warning-box {
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 20px;
+}
+.hg-warning-box h4 {
+  color: var(--danger);
+  margin-bottom: 8px;
+}
+.hg-warning-box ul {
+  padding-left: 18px;
+  font-size: 13.5px;
+}
+
+/* ==========================================================================
+   TABLES
+   ========================================================================== */
+
+.table-wrap {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  background: #fbfbfc;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--heading-color);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 14px 18px;
+  white-space: nowrap;
+}
+
+td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--body-color);
+  font-size: 14px;
+}
+
+tr:hover td {
+  background: #fafafd;
+}
+
+/* ==========================================================================
+   FORMS & INPUTS
+   ========================================================================== */
+
+label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--heading-color);
+  margin-bottom: 6px;
+}
+
+.input-box, input[type="text"], input[type="number"], select, textarea {
+  width: 100%;
+  padding: 9px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--heading-color);
+  background: #ffffff;
+  margin-bottom: 16px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.input-box:focus, input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.15);
+}
+
+/* ==========================================================================
+   TABS
+   ========================================================================== */
+
+.hg-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 24px;
+  padding-bottom: 6px;
+  overflow-x: auto;
+}
+
+.hg-tab {
+  border: none;
+  background: transparent;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--body-color);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.hg-tab:hover {
+  background: #f5f5f9;
+  color: var(--heading-color);
+}
+.hg-tab.active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--btn-shadow);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   CHAT UI
+   ========================================================================== */
+
+.hg-chat-window {
+  min-height: 420px;
+  max-height: 540px;
+  overflow-y: auto;
+  padding: 16px;
+  background: #f5f5f9;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hg-bubble {
+  max-width: 82%;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.hg-bubble.ai {
+  align-self: flex-start;
+  background: #ffffff;
+  color: var(--heading-color);
+  box-shadow: 0 1px 4px rgba(67, 89, 113, 0.1);
+  border-bottom-left-radius: 2px;
+}
+
+.hg-bubble.user {
+  align-self: flex-end;
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(105, 108, 255, 0.35);
+  border-bottom-right-radius: 2px;
+}
+
+.hg-choice {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--body-color);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.hg-choice:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+.hg-choice.selected {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ==========================================================================
+   TIỆN ÍCH
+   ========================================================================== */
+
+.hg-flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hg-kv, .sneat-kv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px;
+}
+.sneat-kv-label { color: var(--body-color); }
+.sneat-kv-value { font-weight: 600; color: var(--heading-color); }
+
+.hg-toast, .sneat-toast {
+  padding: 12px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hg-toast.ok, .sneat-toast.ok { background: var(--success-light); color: var(--success-dark); }
+.hg-toast.err, .sneat-toast.err { background: var(--danger-light); color: var(--danger); }
+
+.hg-page-header {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hg-muted { color: var(--muted-color); font-size: 13px; }
+.hg-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted-color);
+  font-size: 14px;
+}
+
+.benefit-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.benefit-list li {
+  display: flex;
+  align-items: flex-start;
+  font-size: 13.5px;
+}
+
+.hg-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.hg-verdict {
+  background: var(--primary-light);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  color: #435971;
+  margin-bottom: 20px;
+}
+.hg-verdict h3 {
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.hg-sets-badge {
+  background: var(--info-light);
+  color: var(--info-dark);
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Responsive sidebar */
+@media (max-width: 1024px) {
+  .sneat-sidebar {
+    transform: translateX(-100%);
+  }
+  .sneat-sidebar.open {
+    transform: translateX(0);
+  }
+  .sneat-main-content {
+    margin-left: 0;
+  }
+}
